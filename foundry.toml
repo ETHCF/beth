@@ -1,0 +1,20 @@
+[profile.default]
+src = "src"
+out = "out"
+test = "test"
+libs = ["lib"]
+solc_version = "0.8.24"
+optimizer = true
+optimizer_runs = 200
+gas_reports = ["BETH"]
+
+remappings = [
+  "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+  "forge-std/=lib/forge-std/src/"
+]
+
+[fmt]
+line_length = 100
+tab_width = 4
+bracket_spacing = true
+int_types = "long"
