@@ -7,7 +7,7 @@ import {BETH} from "src/BETH.sol";
 contract DepositScript is Script {
     function run() external {
         uint256 pk = vm.envUint("PRIVATE_KEY");
-        address bethAddr = vm.envAddress("BETH_ADDRESS");
+        address payable bethAddr = payable(vm.envAddress("BETH_ADDRESS"));
         uint256 amount = vm.envUint("DEPOSIT_AMOUNT_WEI");
 
         vm.startBroadcast(pk);

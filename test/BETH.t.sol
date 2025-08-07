@@ -15,7 +15,7 @@ contract BETHTest is Test {
         beth = new BETH();
     }
 
-    function test_DecimalsIs18() public {
+    function test_DecimalsIs18() public view {
         assertEq(beth.decimals(), 18);
     }
 
@@ -24,9 +24,7 @@ contract BETHTest is Test {
         uint256 burnBefore = BURN.balance;
 
         vm.prank(alice);
-        uint256 minted = beth.deposit{value: 1 ether}();
-
-        assertEq(minted, 1 ether);
+        beth.deposit{value: 1 ether}();
         assertEq(beth.balanceOf(alice), 1 ether);
         assertEq(beth.totalBurned(), 1 ether);
         assertEq(address(beth).balance, 0);
@@ -38,9 +36,7 @@ contract BETHTest is Test {
         uint256 burnBefore = BURN.balance;
 
         vm.prank(alice);
-        uint256 minted = beth.depositTo{value: 2 ether}(bob);
-
-        assertEq(minted, 2 ether);
+        beth.depositTo{value: 2 ether}(bob);
         assertEq(beth.balanceOf(bob), 2 ether);
         assertEq(beth.totalBurned(), 2 ether);
         assertEq(address(beth).balance, 0);

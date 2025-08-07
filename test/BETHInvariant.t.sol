@@ -15,11 +15,11 @@ contract BETHInvariantTest is Test {
         targetContract(address(handler));
     }
 
-    function invariant_NoETHRetention() public {
+    function invariant_NoETHRetention() public view {
         assertEq(address(beth).balance, 0);
     }
 
-    function invariant_TotalSupplyEqualsTotalBurned() public {
+    function invariant_TotalSupplyEqualsTotalBurned() public view {
         assertEq(beth.totalSupply(), beth.totalBurned());
     }
 }

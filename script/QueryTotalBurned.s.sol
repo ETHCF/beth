@@ -6,7 +6,7 @@ import {BETH} from "src/BETH.sol";
 
 contract QueryTotalBurned is Script {
     function run() external view {
-        address bethAddr = vm.envAddress("BETH_ADDRESS");
+        address payable bethAddr = payable(vm.envAddress("BETH_ADDRESS"));
         uint256 burned = BETH(bethAddr).totalBurned();
         console2.log("totalBurned:", burned);
     }

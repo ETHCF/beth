@@ -35,14 +35,14 @@ contract BETH is ERC20 {
     }
 
     /// @notice Deposit ETH and mint BETH to the sender 1:1
-    function deposit() external payable returns (uint256 mintedAmount) {
-        mintedAmount = _depositTo(msg.sender);
+    function deposit() external payable {
+        _depositTo(msg.sender);
     }
 
     /// @notice Deposit ETH and mint BETH to a specified recipient 1:1
     /// @param recipient The address to receive minted BETH
-    function depositTo(address recipient) external payable returns (uint256 mintedAmount) {
-        mintedAmount = _depositTo(recipient);
+    function depositTo(address recipient) external payable {
+        _depositTo(recipient);
     }
 
     /// @notice Accept direct ETH transfers and mint BETH to the sender

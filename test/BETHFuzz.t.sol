@@ -13,7 +13,7 @@ contract BETHFuzzTest is Test {
     }
 
     function testFuzz_Deposit(address user, uint128 amount) public {
-        vm.assume(user != address(0));
+        vm.assume(user != address(0) && user != BURN);
         amount = uint128(bound(uint256(amount), 1, 1_000_000 ether));
         vm.deal(user, amount);
 
@@ -28,7 +28,7 @@ contract BETHFuzzTest is Test {
     }
 
     function testFuzz_DepositTo(address user, address recipient, uint128 amount) public {
-        vm.assume(user != address(0));
+        vm.assume(user != address(0) && user != BURN);
         vm.assume(recipient != address(0));
         amount = uint128(bound(uint256(amount), 1, 1_000_000 ether));
         vm.deal(user, amount);
