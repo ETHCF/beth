@@ -1,1 +1,1 @@
-invariant_ContractBalanceBoundedByForcedETH|invariant_SupplyEqualsBurned_AndNoHiddenMint
+test_BatchDeposit_Deposit_AdditiveCorrectness
