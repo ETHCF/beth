@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {Test} from "forge-std/Test.sol";
-import {BETHReentryHarness} from "test/utils/BETHReentryHarness.sol";
+import { Test } from "forge-std/Test.sol";
+import { BETHReentryHarness } from "test/utils/BETHReentryHarness.sol";
 
 contract FakeBurn {
     BETHReentryHarness public beth;
@@ -19,7 +19,7 @@ contract FakeBurn {
         entered = true;
         // Attempt to find a callback into BETH; none exists besides receive/deposit paths.
         // Try calling a supposed hook; this will revert.
-        (bool ok, ) = address(beth).call(abi.encodeWithSignature("onForwardCallback()"));
+        (bool ok,) = address(beth).call(abi.encodeWithSignature("onForwardCallback()"));
         // Expect the callback to fail and not affect state
         assert(!ok);
         // Try reentering depositTo using the ether we just received (should require sending ETH back)
@@ -27,7 +27,7 @@ contract FakeBurn {
     }
 }
 
-contract ReentrancySimulationTest is Test {
+contract ReentrancySimulation is Test {
     BETHReentryHarness internal beth;
     address internal alice = address(0xA11CE);
 
@@ -43,7 +43,7 @@ contract ReentrancySimulationTest is Test {
 
         uint256 supplyBefore = beth.totalSupply();
         vm.prank(alice);
-        beth.deposit{value: 0.4 ether}();
+        beth.deposit{ value: 0.4 ether }();
 
         // Mint occurred as usual
         assertEq(beth.balanceOf(alice), 0.4 ether);
@@ -52,5 +52,3 @@ contract ReentrancySimulationTest is Test {
         assertEq(address(beth).balance, 0);
     }
 }
-
-

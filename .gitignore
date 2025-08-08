@@ -1,0 +1,48 @@
+# OS junk
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Foundry build artifacts
+out/
+cache/
+coverage-html/
+lcov.info
+gas-report.txt
+
+# Analysis output
+abi.json
+methods.txt
+slither.json
+findings.json
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Node/npm
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Logs
+*.log
+
+# Editor/project settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Other
+dist/
+build/
+tmp/
+temp/

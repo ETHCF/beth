@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {Script, console2} from "forge-std/Script.sol";
-import {BETH} from "src/BETH.sol";
+import { Script, console2 } from "forge-std/Script.sol";
+import { BETH } from "src/BETH.sol";
 
 contract QueryTotalBurned is Script {
     function run() external view {

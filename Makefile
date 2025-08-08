@@ -1,13 +1,19 @@
-.PHONY: install build test snapshot deploy deposit depositTo query verify gas
+.PHONY: install build test snapshot deploy deposit depositTo query verify gas fmt lint coverage slither inspect ci-local
 
 install:
-	forge install OpenZeppelin/openzeppelin-contracts@v5.0.2 foundry-rs/forge-std@v1.9.5 --no-commit | cat
+	forge install OpenZeppelin/openzeppelin-contracts@v5.0.2 foundry-rs/forge-std@v1.9.5 | cat
 
 build:
 	forge build | cat
 
 test:
 	forge test -vvv | cat
+
+fmt:
+	forge fmt --check | cat
+
+lint:
+	forge fmt --check | cat
 
 snapshot:
 	forge snapshot | cat
@@ -34,4 +40,25 @@ verify:
 
 gas:
 	forge test --gas-report | cat
+
+coverage:
+	forge coverage --report lcov | cat
+
+slither:
+	slither . --config-file slither.config.json | cat
+
+inspect:
+	forge inspect src/BETH.sol:BETH methods | cat
+
+ci-local:
+	bash scripts/ci-local.sh
+
+.PHONY: update-golden
+update-golden:
+	@echo "==> Refresh ABI snapshot"
+	forge inspect src/BETH.sol:BETH abi > abi/BETH.json
+	@echo "==> Compute runtime code hash"
+	@HASH=$$(cast keccak $$(jq -r '.deployedBytecode.object' out/BETH.sol/BETH.json)); \
+	 sed -i '' "s/hex\"[0-9a-f]*\"/hex\"$${HASH#0x}\"/" test/unit/BETHBytecodeHash.t.sol; \
+	 echo "Updated runtime code hash: $$HASH"
 

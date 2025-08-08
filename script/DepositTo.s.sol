@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-import {Script, console2} from "forge-std/Script.sol";
-import {BETH} from "src/BETH.sol";
+import { Script, console2 } from "forge-std/Script.sol";
+import { BETH } from "src/BETH.sol";
 
 contract DepositToScript is Script {
     function run() external {
@@ -12,7 +12,7 @@ contract DepositToScript is Script {
         address recipient = vm.envAddress("RECIPIENT");
 
         vm.startBroadcast(pk);
-        BETH(bethAddr).depositTo{value: amount}(recipient);
+        BETH(bethAddr).depositTo{ value: amount }(recipient);
         vm.stopBroadcast();
 
         console2.log("Deposited", amount, "wei to", bethAddr);

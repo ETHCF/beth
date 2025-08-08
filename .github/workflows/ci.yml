@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: latest
+      - name: Check toolchain
+        run: forge --version
+      - name: Format check
+        run: forge fmt --check
+      - name: SPDX check
+        run: |
+          missing=$(git ls-files '*.sol' | xargs -I{} sh -c "head -n1 {} | grep -qx '// SPDX-License-Identifier: MIT' || echo {}")
+          if [ -n "$missing" ]; then
+            echo 'Files missing MIT SPDX:'
+            echo "$missing"
+            exit 1
+          fi
+      - name: Build
+        run: forge build --sizes
+      - name: Run tests with gas report
+        run: forge test --gas-report
+      - name: Coverage
+        run: |
+          forge coverage --report lcov
+      - name: Enforce coverage thresholds
+        run: |
+          total=$(lcov --summary lcov.info | awk '/lines/ {print $2}' | sed 's/%//')
+          echo "Total coverage: $total%"
+          beth=$(awk '
+            $0 ~ /^SF:src\/BETH.sol$/ { in_beth=1; lf=0; lh=0 }
+            in_beth && $0 ~ /^LF:/ { sub("LF:","",$0); lf=$0 }
+            in_beth && $0 ~ /^LH:/ { sub("LH:","",$0); lh=$0 }
+            in_beth && $0 ~ /^end_of_record$/ { in_beth=0; if (lf>0) printf("%.2f", (lh*100)/lf); else printf("0.00") }
+          ' lcov.info)
+          echo "BETH.sol coverage: $beth%"
+          bc -l <<< "$total >= 95" | grep -q 1 || (echo "Coverage below 95%" && exit 1)
+          bc -l <<< "$beth == 100" | grep -q 1 || (echo "BETH.sol coverage not 100%" && exit 1)
+      - name: Install Slither
+        run: |
+          sudo apt-get update && sudo apt-get install -y python3-pip jq bc
+          pip3 install slither-analyzer solc-select
+          solc-select install 0.8.24 && solc-select use 0.8.24
+      - name: Run Slither
+        run: |
+          # Run slither and fail on MEDIUM or higher severities
+          slither . --config-file slither.config.json --json slither.json || true
+          # Extract findings with severity >= MEDIUM
+          jq '.results | .detectors[] | select(.impact=="Medium" or .impact=="High" or .impact=="Critical")' slither.json > findings.json || true
+          if [ -s findings.json ]; then
+            echo "Slither found Medium+ findings:" && cat findings.json && exit 1
+          fi
+      - name: ABI/Selectors check
+        run: |
+          bash scripts/check_selectors.sh
+
+

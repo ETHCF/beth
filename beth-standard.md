@@ -1,6 +1,6 @@
 ## BETH Standard: Proof-of-Burn ERC-20
 
-**Author**: Zak Cole, zcole@linux.com, Ethereum Community Foundation
+**Author**: Built by Zak Cole (x.com/0xzak, github.com/zscole) at Number Group for the Ethereum Community Foundation.
 **Status**: Draft  
 **Type**: Standards Track  
 **Category**: ERC  

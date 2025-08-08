@@ -57,5 +57,3 @@ This project adheres to semantic versioning.
 
 ### Known Limitations
 - Forced ETH via `selfdestruct` can reside temporarily in the contract; no BETH is minted for it. `flush()` sweeps it to the burn address without minting.
-
-[1.0.0]: https://example.com/releases/1.0.0

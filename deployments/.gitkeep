@@ -1,0 +1,7 @@
+This directory stores deployment address manifests.
+
+After deploying, write a file named `<chainId>.json` with the following shape:
+
+{ "BETH": "<address>" }
+
+

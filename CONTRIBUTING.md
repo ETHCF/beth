@@ -7,7 +7,7 @@ Thanks for your interest in contributing to BETH. This guide explains how to set
 2. Clone and enter the project directory.
 3. Install dependencies:
    - `forge install`
-   - Or `make install` (if you prefer Make targets)
+   - Or `make install`
 4. Build & test:
    - `forge build`
    - `forge test -vvv`
@@ -19,6 +19,7 @@ Thanks for your interest in contributing to BETH. This guide explains how to set
 - Use OpenZeppelin primitives where appropriate
 - No ownership, no upgradeability, no privileged access
 - Keep code minimal, explicit, and readable; avoid unnecessary complexity
+ - All Solidity files must use MIT SPDX. Keep a single SPDX header at the top.
 
 ## Tests layout
 - Unit: `test/unit/*.t.sol`
@@ -34,12 +35,12 @@ Thanks for your interest in contributing to BETH. This guide explains how to set
 - Mainnet fork (set `RPC_URL`): `RPC_URL=$RPC_URL forge test --match-contract MainnetFork`
 
 ## Analysis tools
-- Slither (static analysis):
-  - Install: `pip3 install slither-analyzer solc-select && solc-select install 0.8.24 && solc-select use 0.8.24`
-  - Run: `slither . --config-file slither.config.json`
+   - Slither (static analysis):
+     - Install: `pip3 install slither-analyzer solc-select && solc-select install 0.8.24 && solc-select use 0.8.24`
+     - Run: `slither . --config-file slither.config.json`
 - Solhint (NatSpec/style):
   - Install: `npm i -g solhint` or use `npx --yes solhint`
-  - Run: `npx --yes solhint -f table "src/**/*.sol" "test/**/*.sol"`
+   - Run: `npx --yes solhint -f table "src/**/*.sol" "test/**/*.sol"`
 - Format: `forge fmt --check` (or `make fmt`)
 - Local CI bundle: `scripts/ci-local.sh` (or `make ci-local`)
 - Selector surface check: `scripts/check_selectors.sh`

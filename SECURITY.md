@@ -6,7 +6,7 @@ This repository tracks the `main` branch. We accept reports against the latest c
 ## Reporting a Vulnerability (Responsible Disclosure)
 - Do not open public issues for vulnerabilities.
 - Preferred: GitHub Security Advisory
-  1. Go to the repo “Security” tab → “Advisories” → “Report a vulnerability”.
+  1. Go to the repo Security tab → Advisories → Report a vulnerability.
   2. Include a minimal reproducible description, potential impact, and (if possible) a PoC/test.
 - Alternate: Email zcole@linux.com
 

@@ -1,0 +1,9 @@
+{
+  "filter_paths": "lib|out|cache",
+  "solc_remaps": [
+    "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+    "forge-std/=lib/forge-std/src/"
+  ]
+}
+
+
