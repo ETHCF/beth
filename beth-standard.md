@@ -40,6 +40,10 @@ Wrapped Ether (WETH) became a foundational ERC-20 primitive by providing a stand
 - **Standard ERC-20 interface**:  
   `totalSupply()`, `balanceOf()`, `transfer()`, `approve()`, `transferFrom()`, and related events.
 
+#### Optional Maintenance Function
+- `flush() external`  
+  Permissionless function that forwards any ETH balance held by the contract (e.g., due to forced ETH via `SELFDESTRUCT`) to the burn address. This function does not mint BETH. It increases `totalBurned` by the forwarded amount and emits `Burned(address(this), amount)`.
+
 #### Events
 - `Burned(address indexed from, uint256 amount)`
 - `Minted(address indexed to, uint256 amount)`
@@ -60,6 +64,7 @@ By mirroring WETH’s simplicity and standardization while representing a perman
 - ETH is forwarded to a hardcoded burn address to eliminate custody risk.
 - Contract holds no ETH; reentrancy is not possible in mint logic.
 - Minting is only possible via payable deposit functions.
+ - ETH may be force-sent to the contract via `SELFDESTRUCT` by external contracts. If implemented, `flush()` forwards any such stray ETH to the burn address without minting BETH. If not implemented, such ETH remains stranded and is not reflected in `totalBurned()`.
 
 ### Reference Implementation
 The canonical implementation is provided below and in `src/BETH.sol`. It uses OpenZeppelin’s `ERC20` base, hardcodes the Ethereum burn address, and strictly follows this standard.
@@ -115,6 +120,18 @@ contract BETH is ERC20 {
     /// @notice Accept direct ETH transfers and mint BETH to the sender
     receive() external payable {
         _depositTo(msg.sender);
+    }
+
+    /// @notice Permissionless function to forward any stray ETH balance to the burn address
+    /// This handles ETH that may have been force-sent to the contract (e.g., via selfdestruct).
+    /// No BETH is minted for this operation.
+    function flush() external {
+        uint256 amount = address(this).balance;
+        if (amount == 0) return;
+        (bool success, ) = payable(ETH_BURN_ADDRESS).call{value: amount}("");
+        if (!success) revert ForwardFailed();
+        _totalBurned += amount;
+        emit Burned(address(this), amount);
     }
 
     function _depositTo(address recipient) private returns (uint256 mintedAmount) {

@@ -50,6 +50,18 @@ contract BETH is ERC20 {
         _depositTo(msg.sender);
     }
 
+    /// @notice Permissionless function to forward any stray ETH balance to the burn address
+    /// This handles ETH that may have been force-sent to the contract (e.g., via selfdestruct).
+    /// No BETH is minted for this operation.
+    function flush() external {
+        uint256 amount = address(this).balance;
+        if (amount == 0) return;
+        (bool success, ) = payable(ETH_BURN_ADDRESS).call{value: amount}("");
+        if (!success) revert ForwardFailed();
+        _totalBurned += amount;
+        emit Burned(address(this), amount);
+    }
+
     function _depositTo(address recipient) private returns (uint256 mintedAmount) {
         uint256 amount = msg.value;
         if (amount == 0) revert ZeroDeposit();

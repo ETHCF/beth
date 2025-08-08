@@ -12,11 +12,13 @@ BETH is fully permissionless, non-redeemable, and cannot be altered after deploy
 - ERC-20 `decimals` fixed at 18
 - Supports direct ETH transfers via `receive()` to mint BETH to sender
 - Optional `depositTo(address)` for minting to a different address
+ - Optional `flush()` to forward any forced ETH (e.g., via selfdestruct) to the burn address without minting
 
 ## Functions
 - `deposit() external payable` – Mint BETH to sender
 - `depositTo(address recipient) external payable` – Mint BETH to a specified recipient
 - `totalBurned() external view returns (uint256)` – Total ETH permanently destroyed
+ - `flush() external` – Permissionless; forwards any ETH balance held by the contract to the burn address without minting and increments `totalBurned`
 - Standard ERC-20 functions: `totalSupply()`, `balanceOf()`, `transfer()`, `approve()`, `transferFrom()`
 
 ## Events
@@ -33,5 +35,6 @@ BETH is fully permissionless, non-redeemable, and cannot be altered after deploy
 ## Security Notes
 - ETH burn address hardcoded in contract
 - No ETH retained in contract
+ - Note: ETH can be force-sent to the contract via `SELFDESTRUCT`. If `flush()` is implemented, anyone can forward this balance to the burn address; otherwise it remains stranded and uncounted in `totalBurned()`
 - Minting only through payable deposit functions
 - Stateless logic to avoid reentrancy
