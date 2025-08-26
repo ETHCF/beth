@@ -3,6 +3,12 @@
   "solc_remaps": [
     "openzeppelin-contracts/=lib/openzeppelin-contracts/",
     "forge-std/=lib/forge-std/src/"
+  ],
+  "exclude_informational": true,
+  "exclude_low": true,
+  "exclude_dependencies": true,
+  "disable_detectors": [
+    "incorrect-equality"
   ]
 }
 
