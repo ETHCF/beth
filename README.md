@@ -12,7 +12,7 @@
 # BETH — Burned ETH (Proof of Burn)
 
 ## Overview
-BETH is an immutable ERC‑20 token representing provably burned ETH. Sending ETH to the contract mints BETH 1:1 and forwards the ETH to the canonical burn address `0x000000000000000000000000000000000000dEaD`.
+BETH is an immutable ERC‑20 token representing provably burned ETH. Sending ETH to the contract mints BETH 1:1 and forwards the ETH to the canonical burn address `0x0000000000000000000000000000000000000000`.
 
 - No admin keys
 - Non-upgradeable
@@ -29,7 +29,7 @@ BETH is an immutable ERC‑20 token representing provably burned ETH. Sending ET
 Key properties
 - Decimals: 18
 - Mint ratio: 1 BETH per 1 wei of ETH
-- Burn address: `0x0000000000000000000000000000000000000`
+- Burn address: `0x0000000000000000000000000000000000000000`
 
 ## Deployment addresses
 - Mainnet: [0x2cb662Ec360C34a45d7cA0126BCd53C9a1fd48F9](https://etherscan.io/address/0x2cb662Ec360C34a45d7cA0126BCd53C9a1fd48F9)

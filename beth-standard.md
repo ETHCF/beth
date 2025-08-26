@@ -80,7 +80,7 @@ import {ERC20} from "openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
 /// Sending ETH mints 1:1 BETH and forwards ETH to the burn address.
 contract BETH is ERC20 {
     /// @dev Ethereum burn address
-    address public constant ETH_BURN_ADDRESS = 0x000000000000000000000000000000000000dEaD;
+    address public constant ETH_BURN_ADDRESS = 0x0000000000000000000000000000000000000000;
 
     /// @dev Revert when a deposit with zero value is attempted
     error ZeroDeposit();
