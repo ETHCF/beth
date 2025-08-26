@@ -29,10 +29,10 @@ BETH is an immutable ERC‑20 token representing provably burned ETH. Sending ET
 Key properties
 - Decimals: 18
 - Mint ratio: 1 BETH per 1 wei of ETH
-- Burn address: `0x000000000000000000000000000000000000dEaD`
+- Burn address: `0x0000000000000000000000000000000000000`
 
 ## Deployment addresses
-- Mainnet: TBA
+- Mainnet: [0x2cb662Ec360C34a45d7cA0126BCd53C9a1fd48F9](https://etherscan.io/address/0x2cb662Ec360C34a45d7cA0126BCd53C9a1fd48F9)
 - Sepolia/Holesky: TBA
 
 ## Example usage
