@@ -12,7 +12,7 @@ import { ERC20 } from "openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
 contract BETH is ERC20 {
     /// @notice Canonical Ethereum burn address used as the ETH sink
     /// @dev This is a constant well-known address to which ETH is forwarded
-    address public constant ETH_BURN_ADDRESS = 0x000000000000000000000000000000000000dEaD;
+    address public constant ETH_BURN_ADDRESS = 0x0000000000000000000000000000000000000000;
 
     /// @notice Error for zero-value deposits
     /// @dev Thrown when msg.value == 0 in deposit paths
