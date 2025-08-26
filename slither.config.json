@@ -7,7 +7,7 @@
   "exclude_informational": true,
   "exclude_low": true,
   "exclude_dependencies": true,
-  "disable_detectors": [
+  "detectors_to_exclude": [
     "incorrect-equality"
   ]
 }
