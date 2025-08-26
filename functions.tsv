@@ -1,0 +1,14 @@
+ETH_BURN_ADDRESS	view	0
+allowance	view	2
+approve	nonpayable	2
+balanceOf	view	1
+decimals	pure	0
+deposit	payable	0
+depositTo	payable	1
+flush	nonpayable	0
+name	view	0
+symbol	view	0
+totalBurned	view	0
+totalSupply	view	0
+transfer	nonpayable	2
+transferFrom	nonpayable	3

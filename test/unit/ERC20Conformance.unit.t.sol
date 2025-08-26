@@ -10,7 +10,7 @@ contract ERC20Conformance is Test {
     address internal alice = address(0xA11CE);
     address internal bob = address(0xB0B);
     address internal spender = address(0x5);
-    address internal constant BURN = address(0x000000000000000000000000000000000000dEaD);
+    address internal constant BURN = address(0x0000000000000000000000000000000000000000);
 
     function setUp() public {
         beth = new BETH();

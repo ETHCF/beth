@@ -1,1 +1,1 @@
-test_ABI_KeccakMatchesCommittedSnapshot
+test_ERC20_Ops_DoNotMoveETH_FromBurn

@@ -8,7 +8,7 @@ contract BETHUnit is Test {
     BETH internal beth;
     address internal alice = address(0xA11CE);
     address internal bob = address(0xB0B);
-    address internal constant BURN = address(0x000000000000000000000000000000000000dEaD);
+    address internal constant BURN = address(0x0000000000000000000000000000000000000000);
 
     event Burned(address indexed from, uint256 amount);
     event Minted(address indexed to, uint256 amount);

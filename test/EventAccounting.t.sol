@@ -8,7 +8,7 @@ contract EventAccounting is Test {
     BETH internal beth;
     address internal alice = address(0xA11CE);
     address internal bob = address(0xB0B);
-    address internal constant BURN = address(0x000000000000000000000000000000000000dEaD);
+    address internal constant BURN = address(0x0000000000000000000000000000000000000000);
 
     bytes32 internal constant SIG_BURNED = keccak256("Burned(address,uint256)");
     bytes32 internal constant SIG_MINTED = keccak256("Minted(address,uint256)");

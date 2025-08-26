@@ -12,7 +12,7 @@ contract FakeFail {
 }
 
 contract BurnForwardingUnit is Test {
-    address internal constant BURN = address(0x000000000000000000000000000000000000dEaD);
+    address internal constant BURN = address(0x0000000000000000000000000000000000000000);
 
     function testFuzz_BurnEOA_CallWithEmptyData_Succeeds(uint128 amount) public {
         vm.assume(amount > 0);

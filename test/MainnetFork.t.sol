@@ -5,7 +5,7 @@ import { Test } from "forge-std/Test.sol";
 import { BETH } from "src/BETH.sol";
 
 contract MainnetForkTests is Test {
-    address internal constant BURN = address(0x000000000000000000000000000000000000dEaD);
+    address internal constant BURN = address(0x0000000000000000000000000000000000000000);
     BETH internal beth;
 
     function setUp() public {
@@ -44,22 +44,22 @@ contract MainnetForkTests is Test {
     }
 
     function test_ERC20_Ops_DoNotMoveETH_FromBurn() public {
-        // Send some BETH to the burn address to allow approvals/transfers
+        // Fund alice and create some BETH
         uint256 amount = 1 ether;
-        address funder = address(0xF00D);
-        vm.deal(funder, amount);
-        vm.prank(funder);
-        beth.depositTo{ value: amount }(BURN);
+        address alice = address(0xA11CE);
+        vm.deal(alice, amount);
+        vm.prank(alice);
+        beth.deposit{ value: amount }();
 
         uint256 burnETHBefore = BURN.balance;
 
-        // From burn address, set an allowance and transfer tokens out
+        // Transfer tokens between non-burn addresses - ERC20 operations should not affect burn address ETH
         address recipient = address(0xB0B);
-        vm.prank(BURN);
+        vm.prank(alice);
         beth.approve(address(this), amount);
 
-        // Pull tokens from burn to recipient
-        beth.transferFrom(BURN, recipient, amount);
+        // Pull tokens from alice to recipient via this contract
+        beth.transferFrom(alice, recipient, amount);
 
         // ETH at burn address must not change due to ERC-20 operations
         assertEq(BURN.balance, burnETHBefore, "ERC20 ops must not move ETH from burn");

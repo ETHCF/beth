@@ -6,7 +6,7 @@ import { BETH } from "src/BETH.sol";
 
 contract BETHFuzzSuite is Test {
     BETH internal beth;
-    address internal constant BURN = address(0x000000000000000000000000000000000000dEaD);
+    address internal constant BURN = address(0x0000000000000000000000000000000000000000);
 
     // Shadow ledger
     mapping(address => uint256) internal expectedBalance;

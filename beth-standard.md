@@ -19,7 +19,7 @@ Wrapped Ether (WETH) became a foundational ERC-20 primitive by providing a stand
  - **Name**: `BETH`
 - **Decimals**: `18`
 - **Mint Ratio**: `1 BETH : 1 ETH`
-- **Burn Address**: `0x000000000000000000000000000000000000dEaD`
+- **Burn Address**: `0x0000000000000000000000000000000000000000`
 - **Upgradeability**: None
 - **Access Control**: None (no ownership or privileged roles)
 - **Redemption**: None (irreversible)
