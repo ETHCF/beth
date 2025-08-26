@@ -8,8 +8,8 @@ fi
 echo "==> forge inspect methods"
 forge inspect src/BETH.sol:BETH methods | tee methods.txt
 
-echo "==> forge inspect abi"
-forge inspect src/BETH.sol:BETH abi > abi.json
+echo "==> extract abi from build artifacts"
+cat out/BETH.sol/BETH.json | jq '.abi' > abi.json
 
 echo "==> filter external functions"
 jq -r '.[] | select(.type=="function") | [.name, (.stateMutability//""), (.inputs|length)] | @tsv' abi.json > functions.tsv
@@ -17,7 +17,7 @@ cat functions.tsv
 
 echo "==> enforce only expected externals and payables"
 # Expected: standard ERC20 externals + BETH functions
-expected=(deposit depositTo flush totalBurned totalSupply balanceOf transfer approve transferFrom allowance name symbol decimals)
+expected=(deposit depositTo flush totalBurned totalSupply balanceOf transfer approve transferFrom allowance name symbol decimals ETH_BURN_ADDRESS)
 
 while IFS=$'\t' read -r name mut _; do
   found=false

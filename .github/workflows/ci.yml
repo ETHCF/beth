@@ -14,7 +14,13 @@ jobs:
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: latest
+          version: stable
+      - name: Fallback Foundry Installation
+        if: failure()
+        run: |
+          curl -L https://foundry.paradigm.xyz | bash
+          echo "${HOME}/.foundry/bin" >> $GITHUB_PATH
+          source ~/.bashrc
       - name: Check toolchain
         run: forge --version
       - name: Format check
