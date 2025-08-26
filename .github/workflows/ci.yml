@@ -53,9 +53,9 @@ jobs:
           echo "BETH.sol coverage: $beth%"
           bc -l <<< "$total >= 95" | grep -q 1 || (echo "Coverage below 95%" && exit 1)
           bc -l <<< "$beth == 100" | grep -q 1 || (echo "BETH.sol coverage not 100%" && exit 1)
-      - name: Install Slither
+      - name: Install Slither and coverage tools
         run: |
-          sudo apt-get update && sudo apt-get install -y python3-pip jq bc
+          sudo apt-get update && sudo apt-get install -y python3-pip jq bc lcov
           pip3 install slither-analyzer solc-select
           solc-select install 0.8.24 && solc-select use 0.8.24
       - name: Run Slither
