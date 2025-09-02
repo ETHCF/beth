@@ -1,22 +1,27 @@
-## BETH Standard: Proof-of-Burn ERC-20
+---
+title: BETH - Proof-of-Burn ERC-20
+description: An ERC-20 token representing ETH that has been permanently removed from circulation via onchain burn
+author: Zak Cole (@zscole)
+discussions-to: <URL>
+status: Draft
+type: Standards Track
+category: ERC
+created: 2025-08-07
+---
 
-**Author**: Built by Zak Cole (x.com/0xzak, github.com/zscole) at Number Group for the Ethereum Community Foundation.
-**Status**: Draft  
-**Type**: Standards Track  
-**Category**: ERC  
-**Created**: 2025-08-07
-
-### Abstract
+## Abstract
 BETH is an ERC-20 token representing ETH that has been permanently removed from circulation via onchain burn. ETH sent to the BETH contract is forwarded to the Ethereum burn address and an equal amount of BETH is minted to the sender or a designated recipient. BETH is immutable, permissionless, and non-redeemable.
 
-### Motivation
-Wrapped Ether (WETH) became a foundational ERC-20 primitive by providing a standard, composable interface for ETH. BETH extends this pattern to ETH burning, providing a canonical and composable representation of provably destroyed ETH. This enables protocols to integrate burn-based mechanics without reinventing verification or tokenization.
+## Motivation
+Wrapped Ether (WETH) became a foundational ERC-20 primitive by providing a standard, composable interface for ETH. BETH extends this pattern to ETH burning, creating a standard way to represent provably destroyed ETH. Protocols can now integrate burn mechanics without building custom verification systems.
 
-### Specification
+## Specification
 
-#### Contract Properties
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 and RFC 8174.
+
+### Contract Properties
 - **Symbol**: `BETH`
- - **Name**: `BETH`
+- **Name**: `BETH`
 - **Decimals**: `18`
 - **Mint Ratio**: `1 BETH : 1 ETH`
 - **Burn Address**: `0x0000000000000000000000000000000000000000`
@@ -24,49 +29,62 @@ Wrapped Ether (WETH) became a foundational ERC-20 primitive by providing a stand
 - **Access Control**: None (no ownership or privileged roles)
 - **Redemption**: None (irreversible)
 
-#### External Functions
+### External Functions
+
+#### Core Functions
 - `deposit() external payable`  
-  Mints `msg.value` BETH to `msg.sender` and forwards ETH to burn address.
+  Forwards `msg.value` ETH to the burn address, then mints equivalent BETH to `msg.sender`. Reverts if `msg.value` is zero or if forwarding fails.
 
 - `depositTo(address recipient) external payable`  
-  Mints `msg.value` BETH to `recipient` and forwards ETH to burn address.
+  Forwards `msg.value` ETH to the burn address, then mints equivalent BETH to `recipient`. Reverts if `msg.value` is zero or if forwarding fails.
 
 - `receive() external payable`  
-  Equivalent to `deposit()`.
+  Handles direct ETH transfers. Equivalent to calling `deposit()`.
 
 - `totalBurned() external view returns (uint256)`  
-  Returns the total ETH permanently destroyed through the contract.
+  Returns the cumulative amount of ETH permanently destroyed through this contract.
 
-- **Standard ERC-20 interface**:  
-  `totalSupply()`, `balanceOf()`, `transfer()`, `approve()`, `transferFrom()`, and related events.
+#### Standard ERC-20 Functions
+BETH implements the complete ERC-20 interface: `totalSupply()`, `balanceOf()`, `transfer()`, `approve()`, `transferFrom()`, and `allowance()`.
 
-#### Optional Maintenance Function
+### Optional Maintenance Function
 - `flush() external`  
   Permissionless function that forwards any ETH balance held by the contract (e.g., due to forced ETH via `SELFDESTRUCT`) to the burn address. This function does not mint BETH. It increases `totalBurned` by the forwarded amount and emits `Burned(address(this), amount)`.
 
-#### Events
-- `Burned(address indexed from, uint256 amount)`
-- `Minted(address indexed to, uint256 amount)`
-- Standard ERC-20 `Transfer` and `Approval`.
+### Events
+- `Burned(address indexed from, uint256 amount)` - Emitted when ETH is forwarded to the burn address
+- `Minted(address indexed to, uint256 amount)` - Emitted when BETH tokens are minted
+- Standard ERC-20 `Transfer` and `Approval` events per the ERC-20 specification
 
-#### Errors
-- `ZeroDeposit()` – Reverts when `msg.value == 0` on deposit.
-- `ForwardFailed()` – Reverts if forwarding ETH to the burn address fails.
+### Errors
+- `ZeroDeposit()` - Thrown when attempting to deposit zero ETH
+- `ForwardFailed()` - Thrown when the ETH transfer to the burn address fails
 
-### Rationale
-By mirroring WETH’s simplicity and standardization while representing a permanent action (burn), BETH ensures:
-- Predictable integration points for protocols.
-- Transparent and verifiable burn metrics.
-- Zero custody or redemption logic, reducing complexity and attack surface.
-- No governance or upgrade mechanisms, preserving immutability.
+## Rationale
+BETH mirrors WETH's design philosophy but for a permanent action—burning ETH. This approach provides:
+- Simple, predictable integration for protocols
+- Transparent burn tracking without custom verification
+- No custody risk since ETH is immediately destroyed
+- Immutable design with no governance or upgrade paths
 
-### Security Considerations
+## Backwards Compatibility
+BETH is a standard ERC-20 token. Existing wallets, DEXs, and protocols work with BETH without any changes.
+
+## Test Cases
+Test cases are provided in the reference implementation repository under the `test/` directory, including:
+- Unit tests for deposit and depositTo functions
+- Fuzz testing for edge cases and invariants
+- Gas optimization tests
+- Reentrancy protection tests
+- Force ETH handling via flush() function
+
+## Security Considerations
 - ETH is forwarded to a hardcoded burn address to eliminate custody risk.
 - Contract holds no ETH; reentrancy is not possible in mint logic.
 - Minting is only possible via payable deposit functions.
- - ETH may be force-sent to the contract via `SELFDESTRUCT` by external contracts. If implemented, `flush()` forwards any such stray ETH to the burn address without minting BETH. If not implemented, such ETH remains stranded and is not reflected in `totalBurned()`.
+- ETH can be force-sent to the contract via `SELFDESTRUCT` from other contracts. The optional `flush()` function handles this edge case by forwarding such ETH to the burn address without minting BETH.
 
-### Reference Implementation
+## Reference Implementation
 The canonical implementation is provided below and in `src/BETH.sol`. It uses OpenZeppelin’s `ERC20` base, hardcodes the Ethereum burn address, and strictly follows this standard.
 
 ```solidity
@@ -128,10 +146,11 @@ contract BETH is ERC20 {
     function flush() external {
         uint256 amount = address(this).balance;
         if (amount == 0) return;
-        (bool success, ) = payable(ETH_BURN_ADDRESS).call{value: amount}("");
-        if (!success) revert ForwardFailed();
+        // Effects first to satisfy static analyzers; revert will roll back on failure below
         _totalBurned += amount;
         emit Burned(address(this), amount);
+        (bool success, ) = payable(ETH_BURN_ADDRESS).call{value: amount}("");
+        if (!success) revert ForwardFailed();
     }
 
     function _depositTo(address recipient) private returns (uint256 mintedAmount) {
@@ -154,5 +173,5 @@ contract BETH is ERC20 {
 }
 ```
 
-### Licensing
-CC0 or equivalent public domain dedication.
+## Copyright
+Copyright and related rights waived via [CC0](../LICENSE.md).
