@@ -32,8 +32,9 @@ Key properties
 - Burn address: `0x0000000000000000000000000000000000000000`
 
 ## Deployment addresses
-- Mainnet: [0x2cb662Ec360C34a45d7cA0126BCd53C9a1fd48F9](https://etherscan.io/address/0x2cb662Ec360C34a45d7cA0126BCd53C9a1fd48F9)
-- Sepolia/Holesky: TBA
+- Mainnet: [0x2cb662Ec360C34a45d7cA0126BCd53C9a1fd48F9](https://etherscan.io/address/0x2cb662Ec360C34a45d7cA0126BCd53C9a1fd48F9)'
+- Sepolia: [0xD5217239dA26A802D6dF68efA87cDd3B6f00c98e](https://sepolia.etherscan.io/address/0xD5217239dA26A802D6dF68efA87cDd3B6f00c98e)
+- Holesky: TBA
 
 ## Example usage
 
